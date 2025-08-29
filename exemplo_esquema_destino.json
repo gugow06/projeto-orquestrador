@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Customer API Schema",
+  "description": "Esquema moderno para API REST de clientes",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "Identificador único do cliente",
+      "pattern": "^[0-9]+$"
+    },
+    "personal_info": {
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "description": "Primeiro nome do cliente"
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Sobrenome do cliente"
+        },
+        "full_name": {
+          "type": "string",
+          "description": "Nome completo do cliente"
+        },
+        "birth_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Data de nascimento no formato ISO 8601"
+        }
+      },
+      "required": ["first_name", "last_name", "full_name", "birth_date"]
+    },
+    "contact_info": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "description": "Telefone formatado",
+          "pattern": "^\\+55\\s\\([0-9]{2}\\)\\s[0-9]{4,5}-[0-9]{4}$"
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "type": "string",
+              "description": "Logradouro"
+            },
+            "number": {
+              "type": "string",
+              "description": "Número"
+            },
+            "city": {
+              "type": "string",
+              "description": "Cidade"
+            },
+            "state": {
+              "type": "string",
+              "description": "Estado (sigla)"
+            },
+            "full_address": {
+              "type": "string",
+              "description": "Endereço completo formatado"
+            }
+          },
+          "required": ["street", "number", "city", "state", "full_address"]
+        }
+      },
+      "required": ["phone", "address"]
+    },
+    "account_info": {
+      "type": "object",
+      "properties": {
+        "is_active": {
+          "type": "boolean",
+          "description": "Status ativo do cliente"
+        },
+        "credit_limit": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Limite de crédito em reais"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive", "suspended"],
+          "description": "Status da conta"
+        }
+      },
+      "required": ["is_active", "credit_limit", "status"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data de criação do registro"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data da última atualização"
+        },
+        "source": {
+          "type": "string",
+          "description": "Sistema de origem dos dados",
+          "default": "legacy_migration"
+        }
+      },
+      "required": ["created_at", "updated_at", "source"]
+    }
+  },
+  "required": ["customer_id", "personal_info", "contact_info", "account_info", "metadata"]
+}

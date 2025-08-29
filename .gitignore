@@ -1,0 +1,92 @@
+# Dependências
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+.next/
+out/
+build/
+dist/
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+.npm/
+.eslintcache
+.stylelintcache
+
+# Arquivos temporários
+.tmp/
+temp/
+*.tmp
+*.temp
+
+# Arquivos do sistema operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testes
+coverage/
+.nyc_output/
+
+# Uploads e dados temporários
+uploads/*
+!uploads/.gitkeep
+
+# Análise de bundle
+.next/analyze/
+bundle-analyzer/
+.bundle-analyzer/
+
+# Arquivos de backup
+*.bak
+*.backup
+
+# Arquivos de configuração local
+.env.sample
+
+# Docker volumes
+data/
+redis-data/
+
+# Logs de produção
+app.log*
+error.log*
+performance.log*
+
+# Cache de produção
+cache/
+
+# Certificados SSL
+*.pem
+*.key
+*.crt
+
+# Arquivos de deploy
+backups/
+*.tar.gz

@@ -1,0 +1,11 @@
+COD_CLI,NOME_COMPLETO,DT_NASC,TELEFONE,ENDERECO_COMPLETO,STATUS_ATIVO,VLR_CREDITO
+001,João Silva Santos,15/03/1985,11987654321,"Rua das Flores, 123 - São Paulo/SP",S,1500.50
+002,Maria Oliveira Costa,22/07/1990,21976543210,"Av. Paulista, 456 - São Paulo/SP",S,2300.75
+003,Pedro Souza Lima,10/12/1978,31965432109,"Rua do Comércio, 789 - Belo Horizonte/MG",N,0.00
+004,Ana Paula Ferreira,05/09/1992,41954321098,"Rua das Palmeiras, 321 - Rio de Janeiro/RJ",S,850.25
+005,Carlos Eduardo Rocha,18/01/1980,51943210987,"Av. Brasil, 654 - Porto Alegre/RS",S,3200.00
+006,Fernanda Alves Pereira,30/06/1988,61932109876,"Rua Central, 987 - Brasília/DF",S,1750.80
+007,Roberto Carlos Mendes,12/11/1975,71921098765,"Rua da Liberdade, 147 - Salvador/BA",N,0.00
+008,Juliana Santos Barbosa,25/04/1993,81910987654,"Av. Boa Viagem, 258 - Recife/PE",S,920.40
+009,Marcos Antonio Silva,08/08/1982,91909876543,"Rua das Acácias, 369 - Fortaleza/CE",S,1100.60
+010,Luciana Costa Ribeiro,14/02/1987,11898765432,"Rua do Sol, 741 - Manaus/AM",S,1850.90
