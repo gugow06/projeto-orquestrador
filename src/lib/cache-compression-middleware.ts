@@ -92,9 +92,11 @@ export class CacheCompressionMiddleware {
             metadata.processingTime = Date.now() - startTime;
             
             logger.debug('Cache hit', {
-              path: request.url,
-              cacheKey,
-              processingTime: metadata.processingTime,
+              url: request.url,
+              metadata: {
+                cacheKey,
+                processingTime: metadata.processingTime,
+              }
             });
             
             return this.addMetadataHeaders(response, metadata);
@@ -118,11 +120,13 @@ export class CacheCompressionMiddleware {
         metadata.processingTime = Date.now() - startTime;
         
         logger.info('Request processed', {
-          path: request.url,
+          url: request.url,
           method: request.method,
-          cached: metadata.cached,
-          compressed: metadata.compressed,
-          processingTime: metadata.processingTime,
+          metadata: {
+            cached: metadata.cached,
+            compressed: metadata.compressed,
+            processingTime: metadata.processingTime,
+          }
         });
 
         return this.addMetadataHeaders(response, metadata);
@@ -130,9 +134,11 @@ export class CacheCompressionMiddleware {
         metadata.processingTime = Date.now() - startTime;
         
         logger.error('Middleware error', {
-          path: request.url,
-          error: error.message,
-          processingTime: metadata.processingTime,
+          url: request.url,
+          error: error instanceof Error ? error.message : String(error),
+          metadata: {
+            processingTime: metadata.processingTime,
+          }
         });
         
         // Em caso de erro, executar handler sem middleware
@@ -191,7 +197,12 @@ export class CacheCompressionMiddleware {
       
       return response;
     } catch (error) {
-      logger.warn('Cache retrieval error', { key, error: error.message });
+      logger.warn('Cache retrieval error', { 
+        metadata: { 
+          key,
+          error: error instanceof Error ? error.message : String(error)
+        }
+      });
       return null;
     }
   }
@@ -214,9 +225,19 @@ export class CacheCompressionMiddleware {
       const cacheData = { body, headers, status };
       cache.set(key, cacheData, ttl);
       
-      logger.debug('Response cached', { key, size: body.length });
+      logger.debug('Response cached', { 
+        metadata: { 
+          key, 
+          size: body.length 
+        }
+      });
     } catch (error) {
-      logger.warn('Cache save error', { key, error: error.message });
+      logger.warn('Cache save error', { 
+        metadata: { 
+          key,
+          error: error instanceof Error ? error.message : String(error)
+        }
+      });
     }
   }
 
@@ -276,18 +297,24 @@ export class CacheCompressionMiddleware {
       newHeaders.set('vary', 'Accept-Encoding');
       
       logger.debug('Response compressed', {
-        algorithm,
-        originalSize: metadata.originalSize,
-        compressedSize: metadata.compressedSize,
-        ratio: (metadata.compressedSize / metadata.originalSize * 100).toFixed(2) + '%',
+        metadata: {
+          algorithm,
+          originalSize: metadata.originalSize,
+          compressedSize: metadata.compressedSize,
+          ratio: (metadata.compressedSize / metadata.originalSize * 100).toFixed(2) + '%',
+        }
       });
       
-      return new NextResponse(compressedBody, {
+      return new NextResponse(new Uint8Array(compressedBody), {
         status: response.status,
         headers: newHeaders,
       });
     } catch (error) {
-      logger.warn('Compression error', { error: error.message });
+      logger.warn('Compression error', { 
+        metadata: { 
+          error: error instanceof Error ? error.message : String(error) 
+        }
+      });
       return response as NextResponse;
     }
   }

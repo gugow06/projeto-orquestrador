@@ -68,7 +68,7 @@ export function FileUploader({ onComplete }: FileUploaderProps) {
           setPreview(csvData)
           setUploadedFile(file)
         },
-        error: (error) => {
+        error: (error: Error) => {
           setError('Erro ao processar arquivo: ' + error.message)
         }
       })

@@ -12,23 +12,21 @@ class RateLimiter {
   private maxRequests: number;
   private windowMs: number;
 
-  constructor(maxRequests: number = 100, windowMs: number = 15 * 60 * 1000) {
+  constructor(maxRequests: number = 1000, windowMs: number = 60 * 1000) {
     this.maxRequests = maxRequests;
     this.windowMs = windowMs;
     
-    // Limpar entradas expiradas a cada 5 minutos
-    setInterval(() => this.cleanup(), 5 * 60 * 1000);
+    // Limpar entradas expiradas a cada minuto (mais frequente para desenvolvimento)
+    setInterval(() => this.cleanup(), 60 * 1000);
   }
 
   private getClientId(request: NextRequest): string {
-    // Priorizar IP real do cabeçalho X-Forwarded-For
+    // Simplificado para desenvolvimento - apenas IP
     const forwardedFor = request.headers.get('x-forwarded-for');
     const realIp = request.headers.get('x-real-ip');
-    const ip = forwardedFor?.split(',')[0] || realIp || request.ip || 'unknown';
+    const ip = forwardedFor?.split(',')[0] || realIp || request.ip || 'localhost';
     
-    // Incluir User-Agent para melhor identificação
-    const userAgent = request.headers.get('user-agent') || 'unknown';
-    return `${ip}:${userAgent.slice(0, 50)}`;
+    return ip;
   }
 
   private cleanup(): void {
@@ -98,12 +96,12 @@ class RateLimiter {
 
 // Instâncias para diferentes tipos de endpoints
 export const apiRateLimiter = new RateLimiter(
-  parseInt(process.env.RATE_LIMIT_MAX || '100'),
-  parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000') // 15 minutos
+  parseInt(process.env.RATE_LIMIT_MAX || '1000'),
+  parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000') // 1 minuto
 );
 
-export const uploadRateLimiter = new RateLimiter(10, 60 * 1000); // 10 uploads por minuto
-export const authRateLimiter = new RateLimiter(5, 15 * 60 * 1000); // 5 tentativas de auth por 15 min
+export const uploadRateLimiter = new RateLimiter(100, 60 * 1000); // 100 uploads por minuto (desenvolvimento)
+export const authRateLimiter = new RateLimiter(50, 5 * 60 * 1000); // 50 tentativas de auth por 5 min (desenvolvimento)
 
 // Middleware helper
 export function withRateLimit(

@@ -22,7 +22,7 @@ function verifyAuth(request: NextRequest): boolean {
 }
 
 // GET /api/metrics - Obter todas as métricas
-export async function GET(request: NextRequest) {
+async function GET(request: NextRequest) {
   const startTime = Date.now();
   
   try {
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     if (!verifyAuth(request)) {
       logger.warn('Unauthorized metrics access attempt', {
         ip: request.ip,
-        userAgent: request.headers.get('user-agent'),
+        userAgent: request.headers.get('user-agent') ?? undefined,
       });
       
       return NextResponse.json(
@@ -109,11 +109,13 @@ export async function GET(request: NextRequest) {
     const processingTime = Date.now() - startTime;
     
     logger.info('Metrics endpoint accessed', {
-      format,
-      metric,
-      timeRange,
-      processingTime,
-      metricsCount: Object.keys(metricsData).length,
+      duration: processingTime,
+      metadata: {
+        format,
+        metric,
+        timeRange,
+        metricsCount: Object.keys(metricsData).length,
+      }
     });
 
     return NextResponse.json(responseData, {
@@ -126,12 +128,12 @@ export async function GET(request: NextRequest) {
     const processingTime = Date.now() - startTime;
     
     logger.error('Metrics endpoint error', {
-      error: error.message,
-      processingTime,
+      error: error instanceof Error ? error.message : String(error),
+      duration: processingTime,
     });
 
     errorMonitor.recordError(error as Error, {
-      endpoint: '/api/metrics',
+      url: '/api/metrics',
       method: 'GET',
     });
 
@@ -146,7 +148,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/metrics - Adicionar métrica customizada
-export async function POST(request: NextRequest) {
+async function POST(request: NextRequest) {
   const startTime = Date.now();
   
   try {
@@ -175,11 +177,15 @@ export async function POST(request: NextRequest) {
     const processingTime = Date.now() - startTime;
     
     logger.info('Custom metric added', {
-      name,
-      value,
-      unit,
-      tags,
-      processingTime,
+      url: '/api/metrics',
+      method: 'POST',
+      duration: processingTime,
+      metadata: {
+        name,
+        value,
+        unit,
+        tags,
+      },
     });
 
     return NextResponse.json({
@@ -191,8 +197,12 @@ export async function POST(request: NextRequest) {
     const processingTime = Date.now() - startTime;
     
     logger.error('Add metric error', {
-      error: error.message,
-      processingTime,
+      url: '/api/metrics',
+      method: 'POST',
+      duration: processingTime,
+      metadata: {
+        error: error instanceof Error ? error.message : String(error),
+      },
     });
 
     return NextResponse.json(
@@ -203,7 +213,7 @@ export async function POST(request: NextRequest) {
 }
 
 // DELETE /api/metrics - Limpar métricas
-export async function DELETE(request: NextRequest) {
+async function DELETE(request: NextRequest) {
   const startTime = Date.now();
   
   try {
@@ -221,7 +231,11 @@ export async function DELETE(request: NextRequest) {
 
     if (metric) {
       // Limpar métrica específica (implementar se necessário)
-      logger.info('Specific metric cleanup requested', { metric });
+      logger.info('Specific metric cleanup requested', {
+        url: '/api/metrics',
+        method: 'DELETE',
+        metadata: { metric },
+      });
     } else {
       // Limpar cache e resetar algumas métricas
       cacheManager.clearAll();
@@ -239,8 +253,12 @@ export async function DELETE(request: NextRequest) {
     const processingTime = Date.now() - startTime;
     
     logger.error('Metrics cleanup error', {
-      error: error.message,
-      processingTime,
+      url: '/api/metrics',
+      method: 'DELETE',
+      duration: processingTime,
+      metadata: {
+        error: error instanceof Error ? error.message : String(error),
+      },
     });
 
     return NextResponse.json(
@@ -293,23 +311,18 @@ function convertToPrometheus(data: any): string {
   return lines.join('\n') + '\n';
 }
 
-// Aplicar rate limiting
-export const GET_WITH_RATE_LIMIT = withRateLimit(GET, {
-  windowMs: 60000, // 1 minuto
-  maxRequests: 60, // 60 requests por minuto
-});
+// Aplicar rate limiting e exportar handlers
+import RateLimiter from '@/lib/rate-limiter';
 
-export const POST_WITH_RATE_LIMIT = withRateLimit(POST, {
-  windowMs: 60000,
-  maxRequests: 10, // 10 requests por minuto para POST
-});
+const metricsGetLimiter = new RateLimiter(60, 60000); // 60 requests por minuto
+const metricsPostLimiter = new RateLimiter(10, 60000); // 10 requests por minuto
+const metricsDeleteLimiter = new RateLimiter(5, 300000); // 5 requests por 5 minutos
 
-export const DELETE_WITH_RATE_LIMIT = withRateLimit(DELETE, {
-  windowMs: 300000, // 5 minutos
-  maxRequests: 5, // 5 requests por 5 minutos para DELETE
-});
+const GET_WITH_RATE_LIMIT = withRateLimit(GET, metricsGetLimiter);
+const POST_WITH_RATE_LIMIT = withRateLimit(POST, metricsPostLimiter);
+const DELETE_WITH_RATE_LIMIT = withRateLimit(DELETE, metricsDeleteLimiter);
 
-// Exportar handlers com rate limiting
+// Exportar apenas as versões com rate limiting
 export { GET_WITH_RATE_LIMIT as GET };
 export { POST_WITH_RATE_LIMIT as POST };
 export { DELETE_WITH_RATE_LIMIT as DELETE };

@@ -1,7 +1,7 @@
 'use client';
 
+import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
 
 // Componente de loading padrão
@@ -26,7 +26,7 @@ const LoadingCard = ({ title }: { title?: string }) => (
 
 // Lazy loading dos componentes principais com code splitting
 export const LazyCSVUploader = dynamic(
-  () => import('./CSVUploader').then(mod => ({ default: mod.CSVUploader })),
+  () => import('./FileUploader').then(mod => ({ default: mod.FileUploader })),
   {
     loading: () => <LoadingCard title="Uploader de CSV" />,
     ssr: false, // Desabilitar SSR para componentes pesados
@@ -49,37 +49,19 @@ export const LazyOutputPublisher = dynamic(
   }
 );
 
-export const LazyFeedbackSystem = dynamic(
-  () => import('./FeedbackSystem').then(mod => ({ default: mod.FeedbackSystem })),
+// Componentes opcionais que podem não existir
+export const LazyDataTransformer = dynamic(
+  () => import('./DataTransformer').then(mod => ({ default: mod.DataTransformer })),
   {
-    loading: () => <LoadingSpinner />,
+    loading: () => <LoadingCard title="Transformador de Dados" />,
     ssr: false,
   }
 );
 
-// Componentes de visualização (charts, gráficos)
-export const LazyDataVisualization = dynamic(
-  () => import('./DataVisualization').catch(() => ({ default: () => <div>Componente não encontrado</div> })),
+export const LazyAdaptiveInterface = dynamic(
+  () => import('./adaptive-interface').then(mod => ({ default: mod.AdaptiveInterface })),
   {
-    loading: () => <LoadingCard title="Visualização de Dados" />,
-    ssr: false,
-  }
-);
-
-// Componentes de configuração avançada
-export const LazyAdvancedSettings = dynamic(
-  () => import('./AdvancedSettings').catch(() => ({ default: () => <div>Configurações não disponíveis</div> })),
-  {
-    loading: () => <LoadingSpinner />,
-    ssr: false,
-  }
-);
-
-// Componente de relatórios (pode ser pesado)
-export const LazyReportsGenerator = dynamic(
-  () => import('./ReportsGenerator').catch(() => ({ default: () => <div>Gerador de relatórios não disponível</div> })),
-  {
-    loading: () => <LoadingCard title="Gerador de Relatórios" />,
+    loading: () => <LoadingCard title="Interface Adaptativa" />,
     ssr: false,
   }
 );
@@ -93,14 +75,14 @@ export function withLazyLoading<T extends object>(
   const LazyComponent = dynamic(
     () => Promise.resolve({ default: Component }),
     {
-      loading: loadingComponent || LoadingSpinner,
+      loading: loadingComponent ? () => React.createElement(loadingComponent) : LoadingSpinner,
       ssr: false,
     }
   );
 
   return function WrappedComponent(props: T) {
     return (
-      <Suspense fallback={loadingComponent ? <loadingComponent /> : <LoadingSpinner />}>
+      <Suspense fallback={loadingComponent ? React.createElement(loadingComponent) : <LoadingSpinner />}>
         <LazyComponent {...props} />
       </Suspense>
     );
@@ -184,7 +166,7 @@ export function preloadCriticalComponents() {
   if (typeof window !== 'undefined') {
     // Usar requestIdleCallback se disponível
     const preload = () => {
-      import('./CSVUploader');
+      import('./FileUploader');
       import('./SchemaAnalyzer');
     };
 
@@ -196,16 +178,16 @@ export function preloadCriticalComponents() {
   }
 }
 
-// Componente para bundle analysis em desenvolvimento
-export function BundleAnalyzer() {
+// Componente simplificado para desenvolvimento
+export function DevInfo() {
   if (process.env.NODE_ENV !== 'development') {
     return null;
   }
 
   return (
-    <div className="fixed bottom-4 right-4 bg-blue-100 border border-blue-300 rounded p-2 text-xs">
-      <div>Bundle Analysis Mode</div>
-      <div>Check console for chunk info</div>
+    <div className="fixed bottom-4 right-4 bg-green-100 border border-green-300 rounded p-2 text-xs">
+      <div>Development Mode</div>
+      <div>All components loaded directly</div>
     </div>
   );
 }
@@ -214,13 +196,11 @@ export default {
   LazyCSVUploader,
   LazySchemaAnalyzer,
   LazyOutputPublisher,
-  LazyFeedbackSystem,
-  LazyDataVisualization,
-  LazyAdvancedSettings,
-  LazyReportsGenerator,
+  LazyDataTransformer,
+  LazyAdaptiveInterface,
   withLazyLoading,
   useConditionalImport,
   OptionalFeature,
   preloadCriticalComponents,
-  BundleAnalyzer,
+  DevInfo,
 };

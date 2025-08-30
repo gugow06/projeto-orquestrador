@@ -29,14 +29,14 @@ export interface LogEntry {
 
 // Configuração do logger
 const LOG_CONFIG = {
-  level: (process.env.LOG_LEVEL as LogLevel) || 'info',
-  format: process.env.LOG_FORMAT || 'json',
+  level: (process.env.LOG_LEVEL as LogLevel) || 'debug',
+  format: process.env.LOG_FORMAT || 'pretty',
   service: 'projeto-orquestrador',
   version: process.env.npm_package_version || '1.0.0',
   environment: process.env.NODE_ENV || 'development',
-  enableConsole: process.env.NODE_ENV !== 'production' || process.env.ENABLE_CONSOLE_LOGS === 'true',
+  enableConsole: true, // Sempre habilitado em desenvolvimento
   enableFile: process.env.LOG_FILE_PATH ? true : false,
-  filePath: process.env.LOG_FILE_PATH,
+  filePath: process.env.LOG_FILE_PATH || './logs/app.log',
 };
 
 // Níveis de log com prioridades

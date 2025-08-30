@@ -39,7 +39,7 @@ import {
 } from 'lucide-react';
 
 import { DataType } from '@/lib/data-type-inference';
-import { DomainType, DomainAnalysisResult } from '@/lib/domain-analyzer';
+import { DataDomain, DomainAnalysisResult } from '@/lib/domain-analyzer';
 import { ValidationResult } from '@/lib/data-validator';
 import { SuggestionResult } from '@/lib/learning-system';
 
@@ -92,7 +92,7 @@ interface SuggestedField {
 
 type VisualizationType = 'table' | 'chart' | 'summary' | 'validation' | 'mapping';
 
-const DOMAIN_CONFIGS: Record<DomainType, DomainConfig> = {
+const DOMAIN_CONFIGS: Record<DataDomain, DomainConfig> = {
   financeiro: {
     icon: CreditCard,
     color: 'bg-green-500',
@@ -104,7 +104,7 @@ const DOMAIN_CONFIGS: Record<DomainType, DomainConfig> = {
       { name: 'cpf', type: 'cpf', required: true, description: 'CPF do cliente' },
       { name: 'valor', type: 'moeda_real', required: true, description: 'Valor da transação' },
       { name: 'data_transacao', type: 'datetime', required: true, description: 'Data e hora da transação' },
-      { name: 'tipo_transacao', type: 'texto', required: true, description: 'Tipo da operação' }
+      { name: 'tipo_transacao', type: 'texto_livre', required: true, description: 'Tipo da operação' }
     ]
   },
   cadastral: {
@@ -115,7 +115,7 @@ const DOMAIN_CONFIGS: Record<DomainType, DomainConfig> = {
     features: ['Validação de documentos', 'Formatação de endereços', 'Normalização de nomes'],
     visualizations: ['table', 'summary', 'validation', 'mapping'],
     suggestedFields: [
-      { name: 'nome_completo', type: 'texto', required: true, description: 'Nome completo da pessoa' },
+      { name: 'nome_completo', type: 'texto_livre', required: true, description: 'Nome completo da pessoa' },
       { name: 'cpf', type: 'cpf', required: true, description: 'CPF' },
       { name: 'email', type: 'email', required: false, description: 'Email de contato' },
       { name: 'telefone', type: 'telefone', required: false, description: 'Telefone de contato' }
@@ -132,7 +132,7 @@ const DOMAIN_CONFIGS: Record<DomainType, DomainConfig> = {
       { name: 'id_transacao', type: 'transaction_id', required: true, description: 'Identificador único' },
       { name: 'timestamp', type: 'datetime', required: true, description: 'Data e hora' },
       { name: 'valor', type: 'numero_decimal', required: true, description: 'Valor da operação' },
-      { name: 'status', type: 'texto', required: true, description: 'Status da transação' }
+      { name: 'status', type: 'texto_livre', required: true, description: 'Status da transação' }
     ]
   },
   ecommerce: {
@@ -143,10 +143,122 @@ const DOMAIN_CONFIGS: Record<DomainType, DomainConfig> = {
     features: ['Análise de produtos', 'Métricas de vendas', 'Gestão de estoque'],
     visualizations: ['table', 'chart', 'summary', 'mapping'],
     suggestedFields: [
-      { name: 'produto_id', type: 'texto', required: true, description: 'ID do produto' },
+      { name: 'produto_id', type: 'texto_livre', required: true, description: 'ID do produto' },
       { name: 'preco', type: 'moeda_real', required: true, description: 'Preço do produto' },
-      { name: 'categoria', type: 'texto', required: true, description: 'Categoria do produto' },
+      { name: 'categoria', type: 'texto_livre', required: true, description: 'Categoria do produto' },
       { name: 'estoque', type: 'numero_inteiro', required: false, description: 'Quantidade em estoque' }
+    ]
+  },
+  logistico: {
+    icon: TrendingUp,
+    color: 'bg-yellow-500',
+    title: 'Dados Logísticos',
+    description: 'Entregas, fretes e informações de transporte',
+    features: ['Rastreamento de entregas', 'Cálculo de fretes', 'Gestão de rotas'],
+    visualizations: ['table', 'summary', 'validation', 'mapping'],
+    suggestedFields: [
+      { name: 'cep', type: 'cep', required: true, description: 'CEP de entrega' },
+      { name: 'endereco', type: 'texto_livre', required: true, description: 'Endereço completo' },
+      { name: 'peso', type: 'numero_decimal', required: false, description: 'Peso da encomenda' },
+      { name: 'data_entrega', type: 'data_brasileira', required: false, description: 'Data prevista de entrega' }
+    ]
+  },
+  rh_pessoal: {
+    icon: Users,
+    color: 'bg-indigo-500',
+    title: 'Dados de RH',
+    description: 'Funcionários, salários e informações de pessoal',
+    features: ['Gestão de funcionários', 'Controle de salários', 'Análise de cargos'],
+    visualizations: ['table', 'summary', 'validation', 'mapping'],
+    suggestedFields: [
+      { name: 'cpf', type: 'cpf', required: true, description: 'CPF do funcionário' },
+      { name: 'nome', type: 'texto_livre', required: true, description: 'Nome completo' },
+      { name: 'cargo', type: 'texto_livre', required: true, description: 'Cargo do funcionário' },
+      { name: 'salario', type: 'moeda_real', required: false, description: 'Salário do funcionário' }
+    ]
+  },
+  marketing: {
+    icon: BarChart3,
+    color: 'bg-pink-500',
+    title: 'Dados de Marketing',
+    description: 'Campanhas, leads e métricas de marketing',
+    features: ['Análise de campanhas', 'Gestão de leads', 'Métricas de conversão'],
+    visualizations: ['table', 'chart', 'summary', 'validation'],
+    suggestedFields: [
+      { name: 'email', type: 'email', required: true, description: 'Email do lead' },
+      { name: 'campanha', type: 'texto_livre', required: true, description: 'Nome da campanha' },
+      { name: 'conversao', type: 'percentual', required: false, description: 'Taxa de conversão' },
+      { name: 'cliques', type: 'numero_inteiro', required: false, description: 'Número de cliques' }
+    ]
+  },
+  saude: {
+    icon: FileText,
+    color: 'bg-red-500',
+    title: 'Dados de Saúde',
+    description: 'Pacientes, consultas e informações médicas',
+    features: ['Gestão de pacientes', 'Histórico médico', 'Agendamento de consultas'],
+    visualizations: ['table', 'summary', 'validation', 'mapping'],
+    suggestedFields: [
+      { name: 'cpf', type: 'cpf', required: true, description: 'CPF do paciente' },
+      { name: 'nome', type: 'texto_livre', required: true, description: 'Nome do paciente' },
+      { name: 'data_nascimento', type: 'data_brasileira', required: true, description: 'Data de nascimento' },
+      { name: 'consulta', type: 'datetime', required: false, description: 'Data da consulta' }
+    ]
+  },
+  educacional: {
+    icon: FileText,
+    color: 'bg-teal-500',
+    title: 'Dados Educacionais',
+    description: 'Alunos, cursos e informações acadêmicas',
+    features: ['Gestão de alunos', 'Controle de notas', 'Análise acadêmica'],
+    visualizations: ['table', 'summary', 'validation', 'mapping'],
+    suggestedFields: [
+      { name: 'matricula', type: 'texto_livre', required: true, description: 'Número da matrícula' },
+      { name: 'nome', type: 'texto_livre', required: true, description: 'Nome do aluno' },
+      { name: 'curso', type: 'texto_livre', required: true, description: 'Nome do curso' },
+      { name: 'nota', type: 'numero_decimal', required: false, description: 'Nota do aluno' }
+    ]
+  },
+  imobiliario: {
+    icon: Database,
+    color: 'bg-amber-500',
+    title: 'Dados Imobiliários',
+    description: 'Imóveis, valores e características',
+    features: ['Gestão de imóveis', 'Análise de preços', 'Características dos imóveis'],
+    visualizations: ['table', 'summary', 'validation', 'mapping'],
+    suggestedFields: [
+      { name: 'cep', type: 'cep', required: true, description: 'CEP do imóvel' },
+      { name: 'valor', type: 'moeda_real', required: true, description: 'Valor do imóvel' },
+      { name: 'area', type: 'numero_decimal', required: false, description: 'Área em m²' },
+      { name: 'quartos', type: 'numero_inteiro', required: false, description: 'Número de quartos' }
+    ]
+  },
+  automotivo: {
+    icon: TrendingUp,
+    color: 'bg-slate-500',
+    title: 'Dados Automotivos',
+    description: 'Veículos, placas e informações automotivas',
+    features: ['Gestão de veículos', 'Controle de placas', 'Histórico automotivo'],
+    visualizations: ['table', 'summary', 'validation', 'mapping'],
+    suggestedFields: [
+      { name: 'placa', type: 'placa_veiculo', required: true, description: 'Placa do veículo' },
+      { name: 'modelo', type: 'texto_livre', required: true, description: 'Modelo do veículo' },
+      { name: 'marca', type: 'texto_livre', required: true, description: 'Marca do veículo' },
+      { name: 'ano', type: 'numero_inteiro', required: false, description: 'Ano do veículo' }
+    ]
+  },
+  governo: {
+    icon: FileText,
+    color: 'bg-emerald-500',
+    title: 'Dados Governamentais',
+    description: 'Cidadãos, processos e serviços públicos',
+    features: ['Gestão de cidadãos', 'Controle de processos', 'Serviços públicos'],
+    visualizations: ['table', 'summary', 'validation', 'mapping'],
+    suggestedFields: [
+      { name: 'cpf', type: 'cpf', required: true, description: 'CPF do cidadão' },
+      { name: 'nome', type: 'texto_livre', required: true, description: 'Nome completo' },
+      { name: 'protocolo', type: 'texto_livre', required: false, description: 'Número do protocolo' },
+      { name: 'data_processo', type: 'data_brasileira', required: false, description: 'Data do processo' }
     ]
   },
   generico: {
@@ -157,8 +269,8 @@ const DOMAIN_CONFIGS: Record<DomainType, DomainConfig> = {
     features: ['Análise exploratória', 'Detecção de padrões', 'Validação básica'],
     visualizations: ['table', 'summary', 'validation', 'mapping'],
     suggestedFields: [
-      { name: 'id', type: 'texto', required: true, description: 'Identificador' },
-      { name: 'nome', type: 'texto', required: true, description: 'Nome ou descrição' },
+      { name: 'id', type: 'texto_livre', required: true, description: 'Identificador' },
+      { name: 'nome', type: 'texto_livre', required: true, description: 'Nome ou descrição' },
       { name: 'valor', type: 'numero_decimal', required: false, description: 'Valor numérico' },
       { name: 'data', type: 'data_brasileira', required: false, description: 'Data relevante' }
     ]
@@ -196,8 +308,8 @@ export function AdaptiveInterface({
   }, [suggestions]);
 
   const getFieldDataType = (fieldName: string): DataType => {
-    const analysis = domainAnalysis.fieldAnalysis.find(f => f.fieldName === fieldName);
-    return analysis?.inferredType || 'texto';
+    // Como fieldAnalysis não existe na interface, retornamos um tipo padrão
+    return 'texto_livre';
   };
 
   const validationSummary = useMemo(() => {

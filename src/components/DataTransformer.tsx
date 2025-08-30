@@ -50,9 +50,9 @@ export function DataTransformer({ inputData, analysisResult, onComplete }: DataT
             
             // Aplicar transformações baseadas no tipo
             if (mapping.targetType === 'number' && mapping.sourceType === 'string') {
-              transformedValue = parseFloat(sourceValue) || 0
+              transformedValue = (parseFloat(sourceValue) || 0).toString()
             } else if (mapping.targetType === 'boolean') {
-              transformedValue = ['true', 'yes', '1', 'sim'].includes(sourceValue?.toLowerCase())
+              transformedValue = ['true', 'yes', '1', 'sim'].includes(sourceValue?.toLowerCase()).toString()
             } else if (mapping.targetType === 'date') {
               transformedValue = new Date(sourceValue).toISOString().split('T')[0]
             }

@@ -4,7 +4,7 @@
  */
 
 import { DataType } from './data-type-inference';
-import { DomainType } from './domain-analyzer';
+import { DataDomain } from './domain-analyzer';
 import { ValidationResult } from './data-validator';
 
 export interface LearningPattern {
@@ -15,7 +15,7 @@ export interface LearningPattern {
   usageCount: number;
   successRate: number;
   lastUsed: Date;
-  domain: DomainType;
+  domain: DataDomain;
   metadata: PatternMetadata;
 }
 
@@ -24,7 +24,7 @@ export interface SourcePattern {
   dataTypes: DataType[];
   sampleValues: string[][];
   structure: StructureSignature;
-  domain: DomainType;
+  domain: DataDomain;
 }
 
 export interface TargetMapping {
@@ -136,7 +136,7 @@ export class LearningSystem {
     sourceData: any[],
     sourceStructure: StructureSignature,
     targetMapping: TargetMapping,
-    domain: DomainType,
+    domain: DataDomain,
     metadata: Partial<PatternMetadata> = {}
   ): string {
     const sourcePattern = this.extractSourcePattern(sourceData, sourceStructure, domain);
@@ -190,7 +190,7 @@ export class LearningSystem {
   suggestMappings(
     sourceData: any[],
     sourceStructure: StructureSignature,
-    domain?: DomainType
+    domain?: DataDomain
   ): SuggestionResult {
     const sourcePattern = this.extractSourcePattern(sourceData, sourceStructure, domain);
     const matchingPatterns = this.findMatchingPatterns(sourcePattern);
@@ -318,7 +318,7 @@ export class LearningSystem {
   private extractSourcePattern(
     sourceData: any[],
     structure: StructureSignature,
-    domain?: DomainType
+    domain?: DataDomain
   ): SourcePattern {
     const headers = sourceData[0] ? Object.keys(sourceData[0]) : [];
     const sampleValues = sourceData.slice(0, 5).map(row => 

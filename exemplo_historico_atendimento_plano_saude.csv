@@ -1,0 +1,31 @@
+numero_beneficiario,nome_beneficiario,data_atendimento,tipo_atendimento,especialidade,medico_responsavel,diagnostico_cid,descricao_procedimento,valor_procedimento,valor_coparticipacao,status_autorizacao,unidade_atendimento,observacoes
+12345678901,Maria Silva Santos,2024-01-15,Consulta,Cardiologia,Dr. João Cardoso,I25.9,Consulta cardiológica de rotina,180.00,36.00,Autorizado,Hospital São Lucas,Paciente hipertensa em acompanhamento
+23456789012,José Oliveira Lima,2024-01-18,Exame,Radiologia,Dra. Ana Radiologista,Z01.6,Radiografia de tórax,85.00,0.00,Autorizado,Clínica Imagem Total,Exame pré-operatório
+34567890123,Ana Costa Pereira,2024-01-20,Cirurgia,Ortopedia,Dr. Carlos Ortopedista,M23.2,Artroscopia de joelho,2500.00,500.00,Autorizado,Hospital Ortopédico,Lesão meniscal
+45678901234,Pedro Souza Alves,2024-01-22,Consulta,Endocrinologia,Dra. Lucia Endocrino,E11.9,Consulta endocrinológica,160.00,32.00,Autorizado,Clínica Diabetes Care,Diabetes tipo 2
+56789012345,Carla Mendes Rocha,2024-01-25,Exame,Laboratório,Técnico Lab,Z00.0,Hemograma completo,45.00,0.00,Autorizado,Laboratório Central,Exames de rotina
+67890123456,Roberto Silva Nunes,2024-01-28,Consulta,Neurologia,Dr. Marcos Neurologista,G43.9,Consulta neurológica,200.00,40.00,Autorizado,Clínica NeuroMed,Enxaqueca crônica
+78901234567,Fernanda Lima Costa,2024-02-01,Exame,Cardiologia,Dr. João Cardoso,Z01.8,Ecocardiograma,220.00,44.00,Autorizado,Hospital São Lucas,Avaliação função cardíaca
+89012345678,Marcos Pereira Santos,2024-02-03,Consulta,Urologia,Dr. Paulo Urologista,N40.0,Consulta urológica,170.00,34.00,Autorizado,Clínica UroCenter,Hiperplasia prostática
+90123456789,Juliana Alves Ferreira,2024-02-05,Cirurgia,Ginecologia,Dra. Sandra Ginecologista,N80.9,Laparoscopia diagnóstica,1800.00,360.00,Autorizado,Hospital da Mulher,Endometriose
+01234567890,Antonio Carlos Silva,2024-02-08,Exame,Gastroenterologia,Dr. Ricardo Gastro,K59.0,Colonoscopia,380.00,76.00,Autorizado,Clínica Gastro Plus,Rastreamento câncer colorretal
+11234567891,Beatriz Santos Lima,2024-02-10,Consulta,Dermatologia,Dra. Camila Dermato,L30.9,Consulta dermatológica,140.00,28.00,Autorizado,Clínica Pele Saudável,Dermatite atópica
+22345678902,Carlos Eduardo Rocha,2024-02-12,Exame,Oftalmologia,Dr. Fernando Oftalmo,H52.1,Exame oftalmológico completo,120.00,24.00,Autorizado,Clínica Visão Clara,Miopia
+33456789013,Diana Ferreira Costa,2024-02-15,Consulta,Psiquiatria,Dr. Henrique Psiquiatra,F32.9,Consulta psiquiátrica,180.00,36.00,Autorizado,Clínica Mente Sã,Episódio depressivo
+44567890124,Eduardo Silva Oliveira,2024-02-18,Exame,Pneumologia,Dra. Isabel Pneumo,Z87.891,Espirometria,95.00,19.00,Autorizado,Clínica Respirar Bem,Avaliação função pulmonar
+55678901235,Fabiana Costa Santos,2024-02-20,Consulta,Reumatologia,Dr. Jorge Reumato,M79.3,Consulta reumatológica,190.00,38.00,Autorizado,Clínica Articular,Fibromialgia
+66789012346,Gabriel Alves Lima,2024-02-22,Exame,Cardiologia,Dr. João Cardoso,Z01.8,Teste ergométrico,180.00,36.00,Autorizado,Hospital São Lucas,Avaliação capacidade física
+77890123457,Helena Pereira Rocha,2024-02-25,Consulta,Oncologia,Dra. Karina Onco,C50.9,Consulta oncológica,250.00,50.00,Autorizado,Instituto do Câncer,Acompanhamento pós-cirúrgico
+88901234568,Igor Santos Costa,2024-02-28,Exame,Neurologia,Dr. Marcos Neurologista,Z01.8,Eletroencefalograma,150.00,30.00,Autorizado,Clínica NeuroMed,Investigação epilepsia
+99012345679,Jéssica Lima Silva,2024-03-01,Consulta,Nutrição,Dra. Laura Nutricionista,E66.9,Consulta nutricional,100.00,20.00,Autorizado,Clínica NutriVida,Obesidade
+10123456780,Kevin Oliveira Santos,2024-03-03,Exame,Ortopedia,Dr. Carlos Ortopedista,Z01.8,Ressonância magnética joelho,450.00,90.00,Autorizado,Clínica Imagem Total,Dor articular
+21234567891,Larissa Costa Lima,2024-03-05,Consulta,Ginecologia,Dra. Sandra Ginecologista,Z01.4,Consulta ginecológica,130.00,26.00,Autorizado,Hospital da Mulher,Exame preventivo
+32345678902,Mateus Silva Rocha,2024-03-08,Exame,Urologia,Dr. Paulo Urologista,Z01.8,Ultrassom próstata,120.00,24.00,Autorizado,Clínica UroCenter,Rastreamento
+43456789013,Natália Ferreira Costa,2024-03-10,Consulta,Endocrinologia,Dra. Lucia Endocrino,E04.9,Consulta endocrinológica,160.00,32.00,Autorizado,Clínica Diabetes Care,Nódulo tireoide
+54567890124,Otávio Santos Lima,2024-03-12,Exame,Gastroenterologia,Dr. Ricardo Gastro,Z01.8,Endoscopia digestiva alta,280.00,56.00,Autorizado,Clínica Gastro Plus,Dor epigástrica
+65678901235,Patrícia Alves Silva,2024-03-15,Consulta,Dermatologia,Dra. Camila Dermato,C44.9,Consulta dermatológica,140.00,28.00,Autorizado,Clínica Pele Saudável,Lesão suspeita
+76789012346,Quintino Costa Santos,2024-03-18,Exame,Oftalmologia,Dr. Fernando Oftalmo,H40.9,Campo visual computadorizado,85.00,17.00,Autorizado,Clínica Visão Clara,Glaucoma
+87890123457,Rafaela Lima Oliveira,2024-03-20,Consulta,Psicologia,Psic. Renata,Z63.9,Consulta psicológica,120.00,24.00,Autorizado,Clínica Mente Sã,Terapia cognitiva
+98901234568,Samuel Silva Costa,2024-03-22,Exame,Pneumologia,Dra. Isabel Pneumo,Z87.891,Tomografia tórax,320.00,64.00,Autorizado,Clínica Respirar Bem,Nódulo pulmonar
+09012345679,Tatiana Santos Lima,2024-03-25,Consulta,Reumatologia,Dr. Jorge Reumato,M05.9,Consulta reumatológica,190.00,38.00,Autorizado,Clínica Articular,Artrite reumatoide
+19123456780,Ulisses Oliveira Silva,2024-03-28,Exame,Cardiologia,Dr. João Cardoso,Z01.8,Holter 24h,200.00,40.00,Autorizado,Hospital São Lucas,Arritmia cardíaca

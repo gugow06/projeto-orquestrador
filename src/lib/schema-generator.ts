@@ -4,7 +4,7 @@
  */
 
 import { DataType } from './data-type-inference';
-import { DomainType, DomainAnalysisResult } from './domain-analyzer';
+import { DataDomain, DomainAnalysisResult } from './domain-analyzer';
 import { ValidationResult } from './data-validator';
 import { FieldMapping } from '../components/adaptive-interface';
 
@@ -52,7 +52,7 @@ export interface TransformationHint {
 export interface SchemaMetadata {
   version: string;
   createdAt: string;
-  domain: DomainType;
+  domain: DataDomain;
   confidence: number;
   sourceFields: string[];
   generatedBy: string;
@@ -73,11 +73,11 @@ export interface SchemaGenerationConfig {
   includeValidation: boolean;
   includeTransformations: boolean;
   maxExamples: number;
-  customTemplates: Record<DomainType, Partial<JSONSchema>>;
+  customTemplates: Record<DataDomain, Partial<JSONSchema>>;
 }
 
 export interface SchemaTemplate {
-  domain: DomainType;
+  domain: DataDomain;
   baseSchema: Partial<JSONSchema>;
   fieldMappings: Record<string, SchemaProperty>;
   businessRules: BusinessRule[];
@@ -91,7 +91,7 @@ export interface BusinessRule {
   severity: 'error' | 'warning';
 }
 
-const DOMAIN_TEMPLATES: Record<DomainType, SchemaTemplate> = {
+const DOMAIN_TEMPLATES: Record<DataDomain, SchemaTemplate> = {
   financeiro: {
     domain: 'financeiro',
     baseSchema: {
@@ -497,7 +497,7 @@ export class SchemaGenerator {
 
   // Métodos privados
 
-  private getTemplate(domain: DomainType): SchemaTemplate {
+  private getTemplate(domain: DataDomain): SchemaTemplate {
     return this.config.customTemplates[domain] ? 
       { ...DOMAIN_TEMPLATES[domain], baseSchema: { ...DOMAIN_TEMPLATES[domain].baseSchema, ...this.config.customTemplates[domain] } } :
       DOMAIN_TEMPLATES[domain] || DOMAIN_TEMPLATES.generico;

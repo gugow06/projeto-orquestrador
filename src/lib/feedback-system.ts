@@ -4,7 +4,7 @@
  */
 
 import { DataType } from './data-type-inference';
-import { DomainType, DomainAnalysisResult } from './domain-analyzer';
+import { DataDomain, DomainAnalysisResult } from './domain-analyzer';
 import { ValidationResult } from './data-validator';
 import { JSONSchema } from './schema-generator';
 import { FieldMapping } from '../components/adaptive-interface';
@@ -37,7 +37,7 @@ export interface FeedbackContext {
   fileSize: number;
   recordCount: number;
   fieldCount: number;
-  detectedDomain: DomainType;
+  detectedDomain: DataDomain;
   detectedFields: string[];
   processingTime: number;
   userAgent?: string;
@@ -51,8 +51,8 @@ export interface FeedbackImpact {
 }
 
 export interface DomainFeedback {
-  originalDomain: DomainType;
-  correctedDomain: DomainType;
+  originalDomain: DataDomain;
+  correctedDomain: DataDomain;
   confidence: number;
   reasoning: string;
   fieldEvidence: string[];

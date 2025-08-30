@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       logger.warn('Unauthorized health check attempt', {
         requestId,
         ip: request.headers.get('x-forwarded-for') || request.ip,
-        userAgent: request.headers.get('user-agent'),
+        userAgent: request.headers.get('user-agent') ?? undefined,
       });
       
       return NextResponse.json(
@@ -45,8 +45,10 @@ export async function GET(request: NextRequest) {
     logger.info('Health check completed', {
       requestId,
       duration,
-      status: healthStatus.status,
-      checksCount: Object.keys(healthStatus.checks).length,
+      metadata: {
+        status: healthStatus.status,
+        checksCount: Object.keys(healthStatus.checks).length,
+      }
     });
 
     // Determinar código de status HTTP

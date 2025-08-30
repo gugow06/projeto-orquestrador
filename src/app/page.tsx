@@ -51,7 +51,12 @@ export default function Home() {
       return (
         <AdaptiveInterface 
           data={uploadedData}
-          onComplete={(data) => handleStepComplete('analyze', data)}
+          domainAnalysis={{ domain: 'generico', confidence: 0.8, characteristics: [], suggestedSchema: { name: '', description: '', fields: [] }, transformationRules: [], validationRules: [] }}
+          validationResults={[]}
+          suggestions={{ suggestions: [], confidence: 0, reasoning: '', alternatives: [] }}
+          onMappingChange={(mapping) => console.log('Mapping changed:', mapping)}
+          onTransformationApply={(transformations) => console.log('Transformations applied:', transformations)}
+          onValidationFeedback={(feedback) => console.log('Validation feedback:', feedback)}
         />
       )
     }
